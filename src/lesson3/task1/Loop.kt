@@ -2,10 +2,7 @@
 
 package lesson3.task1
 
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -76,12 +73,14 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var number: Int = n
+    var number: Int = abs(n)
+    if(number == 0) return 1
     var count: Int = 0
-    do {
+    while (number != 0)
+    {
         number /= 10
-        count++
-    } while (number > 0)
+        ++count
+    }
     return count
 }
 
@@ -192,19 +191,19 @@ fun lcm(m: Int, n: Int): Int
 {
     var number1: Int = m
     var number2: Int = n
-    var number3: Int = m * n
-    var max: Int = max(number1,number2)
-    for (i in 2..max)
+    var number3: Int = 1
+    var min: Int = min(number1,number2)
+    for (i in 2..min)
     {
         if(number1 % i == 0 && number2 % i == 0)
         {
             number1 /= i
             number2 /= i
-            max /= i
-            number3 /= i
+            min /= i
+            number3 *= i
         }
     }
-    return number3
+    return number3 * number2 * number1
 }
 
 /**
@@ -231,11 +230,16 @@ fun squareBetweenExists(m: Int, n: Int): Boolean
 {
     val number1: Int = m
     val number2: Int = n
-    for (i in 1..number2 )
+    val numbersqrt1: Double = sqrt(number1.toDouble())
+    val numbersqrt2: Double = sqrt(number2.toDouble())
+    var i: Int = 0
+    while(i < numbersqrt1)
     {
-        if(i * i >= number1 && i * i <= number2)  return true
+        i = i + 1
     }
-    return false
+    if (i >= numbersqrt1 && i <= numbersqrt2) return true
+    else return false
+
 }
 
 /**
@@ -307,6 +311,7 @@ fun sin(x: Double, eps: Double): Double
     var i: Int = 1
     val number: Double = x
     val exact: Double = eps
+    if (number % PI == 0.0) return 0.0
     while(number.pow(i) / factorial(i) >= abs(exact))
     {
         i = i + 2
@@ -336,11 +341,12 @@ fun cos(x: Double, eps: Double): Double
     var i: Int = 2
     val number: Double = x
     val exact: Double = eps
+    if (number % PI == PI / 2 ) return 0.0
     while(number.pow(i) / factorial(i) >= abs(exact))
     {
         i = i + 2
     }
-    var out:Double = -1.0
+    var out:Double = 1.0
     var fuhao: Int = 1
     for(k in  2..i step 2)
     {
@@ -378,7 +384,7 @@ fun squareSequenceDigit(n: Int): Int
         number -= w
     }
     sqr = i * i
-    val wei: Int = abs(number)+1
+    val wei:Int = abs(number)+1
     for (k in 1..wei)
     {
         out = sqr % 10

@@ -54,7 +54,8 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean
  */
 fun daysInMonth(month: Int, year: Int): Int
 {
-    if( month % 2 != 0 || month == 8 ) return 31
+    if(month <= 7 && month % 2 == 1) return 31
+    if (month >= 8 && month % 2 == 0) return 31
     else
     {
         if( month  == 2 )
@@ -105,12 +106,25 @@ fun circleInside(
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean
 {
-    val guodu1 : Int = min(a,b)
-    val gupdu2 : Int = min(b,c)
-    val jieguo1 : Int = min(guodu1,gupdu2)
-    val jiegup2 : Int = max(guodu1,gupdu2)
-    val biaozhun1 :Int = min(r,s)
-    val biaozhun2 : Int = max(r,s)
-    if( jieguo1 <= biaozhun1 && jiegup2 <= biaozhun2 ) return true
+    val number1 = a
+    val number2 = b
+    val number3 = c
+    val std1 = r
+    val std2 = s
+    if (number1 >= max(number2,number3))
+    {
+        if ((std1 >= number2 && std2 >= number3) || (std1 >= number3 && std2 >= number2)) return true
+        else return false
+    }
+    if (number2 >= max(number1,number3))
+    {
+        if ((std1 >= number1 && std2 >= number3) || (std1 >= number3 && std2 >= number1)) return true
+        else return false
+    }
+    if (number3 >= max(number1,number2))
+    {
+        if ((std1 >= number2 && std2 >= number1) || (std1 >= number1 && std2 >= number2)) return true
+        else return false
+    }
     else return false
 }
