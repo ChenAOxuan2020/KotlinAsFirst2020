@@ -70,25 +70,21 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String
-{
-    if ( age % 100 > 0 && age % 100 < 20 )
-    {
+fun ageDescription(age: Int): String {
+    if (age % 100 in 1..19) {
         val number = age % 100
-        if ( number == 1 ) return "$age год"
-        if ( number < 5 ) return  "$age года"
-        if (number < 20 ) return "$age лет"
-        else return "error"
+        if (number == 1) return "$age год"
+        if (number < 5) return "$age года"
+        return if (number < 20) "$age лет"
+        else "error"
     }
-    if ( age >= 20 && age < 200 )
-    {
-        val number : Int = age % 10
-        if( number == 1 ) return  "$age год"
-        if ( number < 5 && number != 0) return  "$age года"
-        if (number < 10 ) return  "$age лет"
-        else return "error"
-    }
-    else return "error"
+    if (age in 20..199) {
+        val number: Int = age % 10
+        if (number == 1) return "$age год"
+        if (number < 5 && number != 0) return "$age года"
+        return if (number < 10) "$age лет"
+        else "error"
+    } else return "error"
 }
 
 
@@ -103,13 +99,12 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-): Double
-{
-    val disstance : Double  = t1 * v1 + t2 * v2 + t3 * v3
-    if ( disstance / 2 < t1 * v1 ) return disstance / 2 / v1
-    if ( disstance / 2 >= t1 * v1 && disstance / 2 < ( t2 * v2 + t1 * v1) ) return ( disstance / 2 - t1 * v1 ) / v2 + t1
-    if ( disstance / 2 >= ( t1 * v1 + t2 * v2)) return t1 + t2 + t3 - disstance / 2 / v3
-    else return Double.NaN
+): Double {
+    val disstance: Double = t1 * v1 + t2 * v2 + t3 * v3
+    if (disstance / 2 < t1 * v1) return disstance / 2 / v1
+    if (disstance / 2 >= t1 * v1 && disstance / 2 < (t2 * v2 + t1 * v1)) return (disstance / 2 - t1 * v1) / v2 + t1
+    return if (disstance / 2 >= (t1 * v1 + t2 * v2)) t1 + t2 + t3 - disstance / 2 / v3
+    else Double.NaN
 }
 
 /**
@@ -125,10 +120,9 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int
-{
-    val a : Int = if ( rookX1 == kingX || rookY1 == kingY ) 1 else 0
-    val b : Int = if ( rookX2 == kingX || rookY2 == kingY ) 2 else 0
+): Int {
+    val a: Int = if (rookX1 == kingX || rookY1 == kingY) 1 else 0
+    val b: Int = if (rookX2 == kingX || rookY2 == kingY) 2 else 0
     return a + b
 }
 
@@ -147,10 +141,9 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int
-{
-    val a : Int = if ( rookX == kingX || rookY == kingY ) 1 else 0
-    val b : Int = if ( abs(bishopX-kingX) == abs(bishopY-kingY) ) 2 else 0
+): Int {
+    val a: Int = if (rookX == kingX || rookY == kingY) 1 else 0
+    val b: Int = if (abs(bishopX - kingX) == abs(bishopY - kingY)) 2 else 0
     return a + b
 }
 
@@ -162,18 +155,15 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int
-    {
-        var theMax :Double = max(a,b)
-        theMax = max(c,theMax)
-        if ( a + b > theMax && a + c > theMax && b + c > theMax)
-        {
-            if( sqr(a) + sqr(b) < sqr(c) || sqr(a) + sqr(c) < sqr(b) || sqr(b) + sqr(c) < sqr(a) ) return 2
-            if( sqr(a) + sqr(b) == sqr(c) || sqr(a) + sqr(c) == sqr(b) || sqr(b) + sqr(c) == sqr(a) ) return 1
-            else return 0
-        }
-        else return  -1
-    }
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    var theMax: Double = max(a, b)
+    theMax = max(c, theMax)
+    if (a + b > theMax && a + c > theMax && b + c > theMax) {
+        if (sqr(a) + sqr(b) < sqr(c) || sqr(a) + sqr(c) < sqr(b) || sqr(b) + sqr(c) < sqr(a)) return 2
+        return if (sqr(a) + sqr(b) == sqr(c) || sqr(a) + sqr(c) == sqr(b) || sqr(b) + sqr(c) == sqr(a)) 1
+        else 0
+    } else return -1
+}
 
 /**
  * Средняя (3 балла)
@@ -183,15 +173,13 @@ fun triangleKind(a: Double, b: Double, c: Double): Int
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int
-{
-    if( a > d || b  < c) return  -1
-    else
-    {
-        if( b <= d && a >= c ) return  b - a
-        if( b <= d && a < c ) return  b - c
-        if( b > d && a >= c ) return  d - a
-        else return d - c
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    if (a > d || b < c) return -1
+    else {
+        if (b <= d && a >= c) return b - a
+        if (b <= d && a < c) return b - c
+        return if (b > d && a >= c) d - a
+        else d - c
     }
 }
 
