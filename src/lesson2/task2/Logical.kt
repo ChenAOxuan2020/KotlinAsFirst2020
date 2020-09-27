@@ -22,10 +22,10 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    val theFirst: Int = number / 1000
-    val theSecond: Int = number / 100 % 10
-    val theThird: Int = number / 10 % 10
-    val theLast: Int = number % 10
+    val theFirst = number / 1000
+    val theSecond = number / 100 % 10
+    val theThird = number / 10 % 10
+    val theLast = number % 10
     return theFirst + theSecond == theThird + theLast
 }
 
@@ -36,7 +36,8 @@ fun isNumberHappy(number: Int): Boolean {
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = x1 == x2 || y1 == y2 || abs(x1 - x2) == abs(y1 - y2)
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+    x1 == x2 || y1 == y2 || abs(x1 - x2) == abs(y1 - y2)
 
 
 /**
@@ -46,19 +47,11 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = x1 == x2 || y1
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    if (month <= 7 && month % 2 == 1) return 31
-    if (month >= 8 && month % 2 == 0) return 31
-    else {
-        if (month == 2) {
-            if (year % 100 == 0) {
-                return when {
-                    year % 400 == 0 -> 29
-                    else -> 28
-                }
-            }
-            return if (year % 100 != 0 && year % 4 == 0) 29
-            else 28
-        } else return 30
+    return when {
+        (month <= 7 && month % 2 == 1) || (month >= 8 && month % 2 == 0) -> 31
+        month != 2 -> 30
+        year % 400 == 0 || (year % 100 != 0 && year % 4 == 0) -> 29
+        else -> 28
     }
 }
 
@@ -74,8 +67,8 @@ fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
 ): Boolean {
-    val disstance: Double = sqrt(sqr(x1 - x2) + sqr(y1 - y2))
-    return disstance + r1 <= r2
+    val s = sqrt(sqr(x1 - x2) + sqr(y1 - y2))
+    return s + r1 <= r2
 }
 
 
@@ -94,8 +87,6 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     }
     if (b >= max(a, c)) {
         return (r >= a && s >= c) || (r >= c && s >= a)
-    }
-    return if (c >= max(a, b)) {
-        (r >= b && s >= a) || (r >= a && s >= b)
-    } else false
+    } else return (r >= b && s >= a) || (r >= a && s >= b)
+
 }
