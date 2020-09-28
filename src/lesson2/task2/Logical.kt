@@ -46,13 +46,13 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
  * Дан номер месяца (от 1 до 12 включительно) и год (положительный).
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
-fun daysInMonth(month: Int, year: Int): Int {
-    return when {
-        (month <= 7 && month % 2 == 1) || (month >= 8 && month % 2 == 0) -> 31
-        month != 2 -> 30
-        year % 400 == 0 || (year % 100 != 0 && year % 4 == 0) -> 29
-        else -> 28
-    }
+fun daysInMonth(month: Int, year: Int): Int = when {
+
+    (month <= 7 && month % 2 == 1) || (month >= 8 && month % 2 == 0) -> 31
+    month != 2 -> 30
+    year % 400 == 0 || (year % 100 != 0 && year % 4 == 0) -> 29
+    else -> 28
+
 }
 
 
@@ -81,12 +81,8 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    if (a >= max(b, c)) {
-        return (r >= b && s >= c) || (r >= c && s >= b)
-    }
-    if (b >= max(a, c)) {
-        return (r >= a && s >= c) || (r >= c && s >= a)
-    } else return (r >= b && s >= a) || (r >= a && s >= b)
-
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = when {
+    a >= max(b, c) -> (r >= b && s >= c) || (r >= c && s >= b)
+    b >= max(a, c) -> (r >= a && s >= c) || (r >= c && s >= a)
+    else -> (r >= b && s >= a) || (r >= a && s >= b)
 }

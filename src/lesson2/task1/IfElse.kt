@@ -72,16 +72,16 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String {
     val number = age % 10
-    if (age < 20 || (age in 101..119)) {
-        return when {
+    return if (age < 20 || (age in 101..119)) {
+        when {
             number == 1 && age < 10 -> "$age год"
             number < 5 && age < 10 -> "$age года"
             else -> "$age лет"
 
         }
-    } else return when {
-        number == 1 -> "$age год"
-        number < 5 && number >1 -> "$age года"
+    } else when (number) {
+        1 -> "$age год"
+        in 2..4 -> "$age года"
         else -> "$age лет"
     }
 }
@@ -100,9 +100,11 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double {
     val s = t1 * v1 + t2 * v2 + t3 * v3
-    if (s / 2 < t1 * v1) return s / 2 / v1
-    if (s / 2 >= t1 * v1 && s / 2 < (t2 * v2 + t1 * v1)) return (s / 2 - t1 * v1) / v2 + t1
-    else return t1 + t2 + t3 - s / 2 / v3
+    return when {
+        s / 2 < t1 * v1 -> s / 2 / v1
+        s / 2 < t2 * v2 + t1 * v1 -> (s / 2 - t1 * v1) / v2 + t1
+        else -> t1 + t2 + t3 - s / 2 / v3
+    }
 }
 
 /**
@@ -155,11 +157,12 @@ fun rookOrBishopThreatens(
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     val theMax = maxOf(a, b, c)
-    if (a + b > theMax && a + c > theMax && b + c > theMax) {
-        if (sqr(a) + sqr(b) < sqr(c) || sqr(a) + sqr(c) < sqr(b) || sqr(b) + sqr(c) < sqr(a)) return 2
-        return if (sqr(a) + sqr(b) == sqr(c) || sqr(a) + sqr(c) == sqr(b) || sqr(b) + sqr(c) == sqr(a)) 1
-        else 0
-    } else return -1
+    return if (a + b + c > 2 * theMax) when {
+        sqr(a) + sqr(b) + sqr(c) < 2 * sqr(theMax) -> 2
+        sqr(a) + sqr(b) + sqr(c) == 2 * sqr(theMax) -> 1
+        else -> 0
+    }
+    else -1
 }
 
 /**
@@ -170,13 +173,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    return when{
-        a > d || b < c -> -1
-        b <= d && a >= c -> b - a
-        b <= d && a < c -> b - c
-        b > d && a >= c -> d - a
-        else -> d - c
-    }
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
+    a > d || b < c -> -1
+    b <= d && a >= c -> b - a
+    b <= d && a < c -> b - c
+    b > d && a >= c -> d - a
+    else -> d - c
+
 }
 
