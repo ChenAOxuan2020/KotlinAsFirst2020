@@ -198,7 +198,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     val sqrt1 = sqrt(m.toDouble())
     var output = sqrt1.toInt()
     if (output < sqrt1) output += 1
-    return output * output <= n && output * output >= m
+    return output * output in m..n
 }
 
 /**
@@ -210,7 +210,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  */
 fun revert(n: Int): Int {
     var numberBefore = n
-    var i: Int = 0
+    var i = 0
     do {
         i *= 10
         i += numberBefore % 10
@@ -261,11 +261,11 @@ fun sin(x: Double, eps: Double): Double {
     var n = 1
     var output = x
     var next = x
-    while (next >= eps){
+    do {
         next *= -1 * x * x / (n + 1) / (n + 2)
         n += 2
         output += next
-    }
+    } while (abs(next) >= abs(eps))
     return output
 }
 
@@ -280,20 +280,16 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var i: Int = 2
-    val number: Double = x
-    val exact: Double = eps
-    if (number % PI == PI / 2) return 0.0
-    while (number.pow(i) / factorial(i) >= abs(exact)) {
-        i = i + 2
-    }
-    var out: Double = 1.0
-    var fuhao: Int = 1
-    for (k in 2..i step 2) {
-        out = number.pow(k) / factorial(k) * (-1.0).pow(fuhao) + out
-        ++fuhao
-    }
-    return out
+    var output = 1.0
+    var next = 1.0
+    var n = 0
+    do {
+        next *= -1 * x * x / (n + 1) / (n + 2)
+        output += next
+        n += 2
+    } while (abs(next) >= abs(eps))
+    return output
+
 }
 
 /**
@@ -306,19 +302,14 @@ fun cos(x: Double, eps: Double): Double {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var number: Int = n
-    var i: Int = 0
-    var sqr: Int = 0
-    var out: Int = 0
+    var number = n
+    var i = 0
+    var sqr: Int
+    var out = 0
     while (number > 0) {
         ++i
         sqr = i * i
-        var w: Int = 1
-        while (sqr / 10 != 0) {
-            ++w
-            sqr = sqr / 10
-        }
-        number -= w
+        number -= digitNumber(sqr)
     }
     sqr = i * i
     val wei: Int = abs(number) + 1
@@ -340,25 +331,20 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var number: Int = n
-    var i: Int = 0
-    var shu: Int = 0
-    var out: Int = 0
+    var number = n
+    var i = 0
+    var fibI: Int
+    var out = 0
     while (number > 0) {
         ++i
-        shu = fib(i)
-        var w: Int = 1
-        while (shu / 10 != 0) {
-            ++w
-            shu /= 10
-        }
-        number -= w
+        fibI = fib(i)
+        number -= digitNumber(fibI)
     }
-    shu = fib(i)
-    val wei: Int = abs(number) + 1
+    fibI = fib(i)
+    val wei = abs(number) + 1
     for (k in 1..wei) {
-        out = shu % 10
-        shu /= 10
+        out = fibI % 10
+        fibI /= 10
     }
     return out
 }
