@@ -121,13 +121,12 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double
-{
-    if (v.isEmpty()) return 0.0
-    else{
-        val cume: Double = v.fold(0.0) {zonghe , next-> next * next + zonghe}
+fun abs(v: List<Double>): Double {
+    return if (v.isEmpty()) 0.0
+    else {
+        val cume: Double = v.fold(0.0) { zonghe, next -> next * next + zonghe }
         val out: Double = sqrt(cume)
-        return out
+        out
     }
 }
 
@@ -136,13 +135,12 @@ fun abs(v: List<Double>): Double
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double
-{
-    if (list.isEmpty()) return 0.0
-    else{
-        val cume: Double = list.fold(0.0) {zonghe , next-> next + zonghe}
+fun mean(list: List<Double>): Double {
+    return if (list.isEmpty()) 0.0
+    else {
+        val cume: Double = list.fold(0.0) { zonghe, next -> next + zonghe }
         val out: Double = cume / list.size
-        return out
+        out
     }
 }
 
@@ -154,18 +152,15 @@ fun mean(list: List<Double>): Double
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double>
-{
-    if (list.isEmpty()) return list
-    else
-    {
-        val cume: Double = list.fold(0.0) {zonghe , next-> next + zonghe}
+fun center(list: MutableList<Double>): MutableList<Double> {
+    return if (list.isEmpty()) list
+    else {
+        val cume: Double = list.fold(0.0) { zonghe, next -> next + zonghe }
         val out: Double = cume / list.size
-        for ((index,element) in list.withIndex())
-        {
+        for ((index, element) in list.withIndex()) {
             list[index] = element - out
         }
-        return list
+        list
     }
 }
 
@@ -176,17 +171,14 @@ fun center(list: MutableList<Double>): MutableList<Double>
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int
-{
-    if (a.isEmpty() || b.isEmpty()) return 0
-    else
-    {
-        var out: Int = 0
-        for (i in 0 .. a.size - 1)
-        {
+fun times(a: List<Int>, b: List<Int>): Int {
+    return if (a.isEmpty() || b.isEmpty()) 0
+    else {
+        var out = 0
+        for (i in a.indices) {
             out += a[i] * b[i]
         }
-        return out
+        out
     }
 }
 
@@ -198,18 +190,15 @@ fun times(a: List<Int>, b: List<Int>): Int
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int
-{
-    if (p.isEmpty()) return 0
-    else
-    {
+fun polynom(p: List<Int>, x: Int): Int {
+    return if (p.isEmpty()) 0
+    else {
         val zhishu: Int = x
-        var out: Int = 0
-        for (i in 0 until p.size)
-        {
+        var out = 0
+        for (i in 0 until p.size) {
             out += (p[i] * zhishu.toDouble().pow(i)).toInt()
         }
-        return out
+        out
     }
 }
 
@@ -223,18 +212,15 @@ fun polynom(p: List<Int>, x: Int): Int
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int>
-{
-    if (list.isEmpty()) return list
-    else
-    {
-        var input: Int = 0
-        for (i in 0 .. list.size - 1)
-        {
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    return if (list.isEmpty()) list
+    else {
+        var input = 0
+        for (i in 0..list.size - 1) {
             input += list[i]
             list[i] = input
         }
-        return list
+        list
     }
 }
 
@@ -245,15 +231,12 @@ fun accumulate(list: MutableList<Int>): MutableList<Int>
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int>
-{
+fun factorize(n: Int): List<Int> {
     var out = listOf<Int>()
     var number: Int = n
-    var i: Int = 2
-    while(number > i)
-    {
-        if (number % i == 0)
-        {
+    var i = 2
+    while (number > i) {
+        if (number % i == 0) {
             out = out + i
             number /= i
             i = 1
@@ -270,15 +253,12 @@ fun factorize(n: Int): List<Int>
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String
-{
+fun factorizeToString(n: Int): String {
     var out = listOf<Int>()
     var number: Int = n
-    var i: Int = 2
-    while(number > i)
-    {
-        if (number % i == 0)
-        {
+    var i = 2
+    while (number > i) {
+        if (number % i == 0) {
             out = out + i
             number /= i
             i = 1
@@ -286,7 +266,7 @@ fun factorizeToString(n: Int): String
         i += 1
     }
     out = out + number
-    return out.joinToString (separator = "*")
+    return out.joinToString(separator = "*")
 }
 
 /**
@@ -296,25 +276,22 @@ fun factorizeToString(n: Int): String
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int>
-{
+fun convert(n: Int, base: Int): List<Int> {
     val di: Int = base
     var number: Int = n
-    var wei: Int = 0
-    var standard: Int =1
+    var wei = 0
+    var standard = 1
     var out = listOf<Int>()
     if (number == 1) return out + 1
-    while (standard < number)
-    {
+    while (standard < number) {
         standard *= di
-        wei = wei + 1
+        wei += 1
     }
-    wei = wei - 1
+    wei -= 1
     standard /= base
-    while (wei != 0)
-    {
+    while (wei != 0) {
         out = out + number / standard
-        wei = wei - 1
+        wei -= 1
         number %= standard
         standard /= di
     }
@@ -332,21 +309,16 @@ fun convert(n: Int, base: Int): List<Int>
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String
-{
-    val di1: Int =base
-    var number1: Int = n
-    var mid = convert(number1,di1)
-    var out: String =""
-    for (i in 0 .. mid.size - 1)
-    {
-        if (mid[i] < 9)
-        {
-            out = out + "${mid[i]}"
-        }
-        else
-        {
-           val m = mid[i] - 10
+fun convertToString(n: Int, base: Int): String {
+    val di1: Int = base
+    val number1: Int = n
+    val mid = convert(number1, di1)
+    var out = ""
+    for (i in 0..mid.size - 1) {
+        if (mid[i] < 9) {
+            out += "${mid[i]}"
+        } else {
+            val m = mid[i] - 10
             out += ('a' + m)
         }
     }
@@ -361,16 +333,14 @@ fun convertToString(n: Int, base: Int): String
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int
-{
+fun decimal(digits: List<Int>, base: Int): Int {
     if (digits.isEmpty()) return 0
-    var out: Int = 0
+    var out = 0
     val di: Int = base
     var zhishu: Int = digits.size - 1
-    for(i in 0 .. digits.size - 1)
-    {
-        out += digits[i] * (base.toDouble().pow(zhishu)).toInt()
-        zhishu = zhishu - 1
+    for (i in 0..digits.size - 1) {
+        out += digits[i] * (di.toDouble().pow(zhishu)).toInt()
+        zhishu -= 1
     }
     return out
 }
