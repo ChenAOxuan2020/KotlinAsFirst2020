@@ -279,6 +279,7 @@ fun convert(n: Int, base: Int): List<Int> {
     var operator = 0
     var standard = 1
     var out = listOf<Int>()
+    if (number == 0) return listOf(0)
     if (number == 1) return out + 1
     while (standard < number) {
         standard *= base
@@ -445,6 +446,9 @@ fun russian(n: Int): String {
         if (moreThunsand == 2) {
             out2 += "две "
             break
+        }
+        if (moreThunsand == 1){
+            out2 += "одна "
         }
         if (moreThunsand >= number[i]) {
             out2 += inRus[i] + " "
