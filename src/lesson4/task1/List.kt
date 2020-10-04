@@ -439,8 +439,8 @@ fun russian(n: Int): String {
         }
         i--
     }
-    if (moreThunsand % 10 == 1) mid = "тысяча "
-    if (moreThunsand % 10 in 2..4) mid = "тысячи "
+    if (moreThunsand % 10 == 1 && moreThunsand % 100 !in 10..19) mid = "тысяча "
+    if (moreThunsand % 10 in 2..4  && moreThunsand % 100 !in 10..19 ) mid = "тысячи "
     i = 35
     while (moreThunsand > 0) {
         if (moreThunsand == 2) {
