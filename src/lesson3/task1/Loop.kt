@@ -109,8 +109,8 @@ fun fib(n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    if (n <= 1) return 1
-    for (i in 2..n / 2) {
+    val sqrtN = sqrt(n.toDouble()).toInt()
+    for (i in 2..sqrtN) {
         if (n % i == 0) return i
     }
     return n
@@ -123,7 +123,8 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    for (i in n / 2 downTo 2) {
+    val sqrtN = sqrt(n.toDouble()).toInt()
+    for (i in n / 2 downTo sqrtN) {
         if (n % i == 0) return i
     }
     return 1
@@ -259,10 +260,25 @@ fun hasDifferentDigits(n: Int): Boolean {
  */
 fun sin(x: Double, eps: Double): Double {
     var n = 1
-    var output = x
-    var next = x
+    var equal = x
+    while (equal !in -PI / 2..PI / 2) {
+        if (equal <= PI && equal >= PI / 2) {
+            equal = PI - equal
+        }
+        if (equal <= -PI / 2 && equal >= -PI) {
+            equal = -PI - equal
+        }
+        if (equal < -PI / 2) {
+            equal += 2 * PI
+        }
+        if (equal > PI / 2) {
+            equal -= 2 * PI
+        }
+    }
+    var next = equal
+    var output = equal
     do {
-        next *= -1 * x * x / (n + 1) / (n + 2)
+        next *= -1 * equal * equal / (n + 1) / (n + 2)
         n += 2
         output += next
     } while (abs(next) >= abs(eps))
@@ -283,13 +299,31 @@ fun cos(x: Double, eps: Double): Double {
     var output = 1.0
     var next = 1.0
     var n = 0
+    var equal = x
+    while (equal !in -PI..PI) {
+        if (equal < -PI) {
+            equal += 2 * PI
+        }
+        if (equal > PI) {
+            equal -= 2 * PI
+        }
+    }
+    val operator: Int
+    if (equal in -PI / 2..PI / 2) {
+        operator = 1
+    } else {
+        operator = -1
+        if (equal <= -PI / 2)
+            equal = -PI - equal
+        if (equal >= PI / 2)
+            equal = PI - equal
+    }
     do {
-        next *= -1 * x * x / (n + 1) / (n + 2)
+        next *= -1 * equal * equal / (n + 1) / (n + 2)
         output += next
         n += 2
     } while (abs(next) >= abs(eps))
-    return output
-
+    return output * operator
 }
 
 /**
@@ -304,16 +338,15 @@ fun cos(x: Double, eps: Double): Double {
 fun squareSequenceDigit(n: Int): Int {
     var number = n
     var i = 0
-    var sqr: Int
+    var sqr = 0
     var out = 0
     while (number > 0) {
         ++i
         sqr = i * i
         number -= digitNumber(sqr)
     }
-    sqr = i * i
-    val wei: Int = abs(number) + 1
-    for (k in 1..wei) {
+    val digit = abs(number) + 1
+    for (k in 1..digit) {
         out = sqr % 10
         sqr /= 10
     }
@@ -333,16 +366,15 @@ fun squareSequenceDigit(n: Int): Int {
 fun fibSequenceDigit(n: Int): Int {
     var number = n
     var i = 0
-    var fibI: Int
+    var fibI = 0
     var out = 0
     while (number > 0) {
         ++i
         fibI = fib(i)
         number -= digitNumber(fibI)
     }
-    fibI = fib(i)
-    val wei = abs(number) + 1
-    for (k in 1..wei) {
+    val digit = abs(number) + 1
+    for (k in 1..digit) {
         out = fibI % 10
         fibI /= 10
     }

@@ -124,8 +124,8 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
 fun abs(v: List<Double>): Double {
     return if (v.isEmpty()) 0.0
     else {
-        val cume: Double = v.fold(0.0) { zonghe, next -> next * next + zonghe }
-        val out: Double = sqrt(cume)
+        val sum = v.fold(0.0) { mix, next -> next * next + mix }
+        val out = sqrt(sum)
         out
     }
 }
@@ -138,8 +138,8 @@ fun abs(v: List<Double>): Double {
 fun mean(list: List<Double>): Double {
     return if (list.isEmpty()) 0.0
     else {
-        val cume: Double = list.fold(0.0) { zonghe, next -> next + zonghe }
-        val out: Double = cume / list.size
+        val sum = list.fold(0.0) { mix, next -> next + mix }
+        val out = sum / list.size
         out
     }
 }
@@ -155,8 +155,7 @@ fun mean(list: List<Double>): Double {
 fun center(list: MutableList<Double>): MutableList<Double> {
     return if (list.isEmpty()) list
     else {
-        val cume: Double = list.fold(0.0) { zonghe, next -> next + zonghe }
-        val out: Double = cume / list.size
+        val out = mean(list)
         for ((index, element) in list.withIndex()) {
             list[index] = element - out
         }
@@ -193,10 +192,9 @@ fun times(a: List<Int>, b: List<Int>): Int {
 fun polynom(p: List<Int>, x: Int): Int {
     return if (p.isEmpty()) 0
     else {
-        val zhishu: Int = x
         var out = 0
-        for (i in 0 until p.size) {
-            out += (p[i] * zhishu.toDouble().pow(i)).toInt()
+        for (i in p.indices) {
+            out += (p[i] * x.toDouble().pow(i)).toInt()
         }
         out
     }
@@ -216,7 +214,7 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
     return if (list.isEmpty()) list
     else {
         var input = 0
-        for (i in 0..list.size - 1) {
+        for (i in 0 until list.size) {
             input += list[i]
             list[i] = input
         }
@@ -277,23 +275,22 @@ fun factorizeToString(n: Int): String {
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    val di: Int = base
-    var number: Int = n
-    var wei = 0
+    var number = n
+    var operator = 0
     var standard = 1
     var out = listOf<Int>()
     if (number == 1) return out + 1
     while (standard < number) {
-        standard *= di
-        wei += 1
+        standard *= base
+        operator += 1
     }
-    wei -= 1
+    operator -= 1
     standard /= base
-    while (wei != 0) {
+    while (operator != 0) {
         out = out + number / standard
-        wei -= 1
+        operator -= 1
         number %= standard
-        standard /= di
+        standard /= base
     }
     return out + number
 }
@@ -314,12 +311,17 @@ fun convertToString(n: Int, base: Int): String {
     val number1: Int = n
     val mid = convert(number1, di1)
     var out = ""
-    for (i in 0..mid.size - 1) {
+    var m: Int
+    for (i in mid.indices) {
         if (mid[i] < 9) {
             out += "${mid[i]}"
         } else {
-            val m = mid[i] - 10
-            out += ('a' + m)
+            val alp = listOf(
+                "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
+                "s", "t", "u", "v", "w", "x", "y", "z"
+            )//26 - 1
+            m = mid[i] - 10
+            out += alp[m]
         }
     }
     return out
@@ -337,10 +339,10 @@ fun decimal(digits: List<Int>, base: Int): Int {
     if (digits.isEmpty()) return 0
     var out = 0
     val di: Int = base
-    var zhishu: Int = digits.size - 1
-    for (i in 0..digits.size - 1) {
-        out += digits[i] * (di.toDouble().pow(zhishu)).toInt()
-        zhishu -= 1
+    var exponentionX = digits.size - 1
+    for (element in digits) {
+        out += element * (di.toDouble().pow(exponentionX)).toInt()
+        exponentionX -= 1
     }
     return out
 }
@@ -357,7 +359,25 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var long = str.length - 1
+    var out = 0
+    var mid: Char
+    var operator = 1
+    val transStoI = listOf(
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+        'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+    )
+    while (long >= 0) {
+        mid = str[long]
+        for (i in 0..35) {
+            if (mid == transStoI[i]) out += operator * i
+        }
+        operator *= base
+        long--
+    }
+    return out
+}
 
 /**
  * Сложная (5 баллов)
@@ -367,7 +387,23 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var number = n
+    val roma = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    val nomal = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    var out = ""
+    var i = 12
+    while (number > 0) {
+        if (number >= nomal[i]) {
+            number -= nomal[i]
+            out += roma[i]
+            i++
+        }
+        i--
+    }
+    return out
+}
+
 
 /**
  * Очень сложная (7 баллов)
@@ -376,4 +412,48 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var moreThunsand = n / 1000
+    var lessThunsand = n % 1000
+    val number = listOf(
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 30, 40, 50, 60, 70, 80,
+        90, 100, 200, 300, 400, 500, 600, 700, 800, 900
+    )//36 - 1
+    val inRus = listOf(
+        "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять",
+        "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать",
+        "восемнадцать", "девятнадцать", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят",
+        "восемьдесят", "девяносто", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот",
+        "восемьсот", "девятьсот"
+    )// 36 - 1
+    if (n == 0) return "ноль"
+    var out1 = ""
+    var mid = "тысяч "
+    var out2 = ""
+    var i = 35
+    while (lessThunsand > 0) {
+        if (lessThunsand >= number[i]) {
+            out1 += inRus[i] + " "
+            lessThunsand -= number[i]
+        }
+        i--
+    }
+    if (moreThunsand % 10 == 1) mid = "тысяча "
+    if (moreThunsand % 10 in 2..4) mid = "тысячи "
+    i = 35
+    while (moreThunsand > 0) {
+        if (moreThunsand == 2) {
+            out2 += "две "
+            break
+        }
+        if (moreThunsand >= number[i]) {
+            out2 += inRus[i] + " "
+            moreThunsand -= number[i]
+        }
+        i--
+    }
+    return when {
+        n <= 999 -> out1.trim()
+        else -> (out2 + mid + out1).trim()
+    }
+}
