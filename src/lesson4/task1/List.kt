@@ -449,6 +449,7 @@ fun russian(n: Int): String {
         }
         if (moreThunsand == 1){
             out2 += "одна "
+            break
         }
         if (moreThunsand >= number[i]) {
             out2 += inRus[i] + " "
