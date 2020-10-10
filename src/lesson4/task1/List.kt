@@ -131,13 +131,9 @@ fun abs(v: List<Double>): Double = when {
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    return if (list.isEmpty()) 0.0
-    else {
-        val sum = list.fold(0.0) { mix, next -> next + mix }
-        val out = sum / list.size
-        out
-    }
+fun mean(list: List<Double>): Double = when {
+    list.isEmpty() -> 0.0
+    else -> list.fold(0.0) { mix, next -> next + mix } / list.size
 }
 
 /**
