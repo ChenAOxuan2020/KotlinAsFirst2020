@@ -261,7 +261,7 @@ fun hasDifferentDigits(n: Int): Boolean {
 fun sin(x: Double, eps: Double): Double {
     var n = 1
     var equal = abs(x % PI)
-    if ((x % (2 * PI) < 0 && x % (2 * PI) > -PI) || x % (2 * PI) > PI){
+    if ((x % (2 * PI) < 0 && x % (2 * PI) > -PI) || x % (2 * PI) > PI) {
         equal = 0 - equal
     }
     var next = equal
