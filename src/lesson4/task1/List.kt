@@ -282,7 +282,7 @@ fun convertToString(n: Int, base: Int): String {
     val mid = convert(n, base)
     var out = buildString { }
     for (i in mid.indices) {
-        out += if (mid[i] < 9) {
+        out += if (mid[i] < 10) {
             "${mid[i]}"
         } else {
             val alp = listOf(
