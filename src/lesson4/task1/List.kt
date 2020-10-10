@@ -121,13 +121,9 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    return if (v.isEmpty()) 0.0
-    else {
-        val sum = v.fold(0.0) { mix, next -> next * next + mix }
-        val out = sqrt(sum)
-        out
-    }
+fun abs(v: List<Double>): Double = when {
+    v.isEmpty() -> 0.0
+    else -> sqrt(v.fold(0.0) { mix, next -> next * next + mix })
 }
 
 /**
@@ -214,7 +210,7 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
     return if (list.isEmpty()) list
     else {
         var input = 0
-        for (i in 0 until list.size) {
+        for (i in list.indices) {
             input += list[i]
             list[i] = input
         }
@@ -230,12 +226,12 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  * Множители в списке должны располагаться по возрастанию.
  */
 fun factorize(n: Int): List<Int> {
-    var out = listOf<Int>()
-    var number: Int = n
+    val out = mutableListOf<Int>()
+    var number = n
     var i = 2
-    while (number > i) {
+    while (number / 2 > i) {
         if (number % i == 0) {
-            out = out + i
+            out.add(i)
             number /= i
             i = 1
         }
@@ -251,21 +247,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    var out = listOf<Int>()
-    var number: Int = n
-    var i = 2
-    while (number > i) {
-        if (number % i == 0) {
-            out = out + i
-            number /= i
-            i = 1
-        }
-        i += 1
-    }
-    out = out + number
-    return out.joinToString(separator = "*")
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя (3 балла)
@@ -275,25 +257,14 @@ fun factorizeToString(n: Int): String {
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
+    if (n == 0) return listOf(0)
+    val out = mutableListOf<Int>()
     var number = n
-    var operator = 0
-    var standard = 1
-    var out = listOf<Int>()
-    if (number == 0) return listOf(0)
-    if (number == 1) return out + 1
-    while (standard < number) {
-        standard *= base
-        operator += 1
+    while (number > 0) {
+        out.add(number % base)
+        number /= base
     }
-    operator -= 1
-    standard /= base
-    while (operator != 0) {
-        out = out + number / standard
-        operator -= 1
-        number %= standard
-        standard /= base
-    }
-    return out + number
+    return out.reversed()
 }
 
 /**
@@ -308,21 +279,18 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
-    val di1: Int = base
-    val number1: Int = n
-    val mid = convert(number1, di1)
-    var out = ""
-    var m: Int
+    val mid = convert(n, base)
+    var out = buildString { }
     for (i in mid.indices) {
-        if (mid[i] < 9) {
-            out += "${mid[i]}"
+        out += if (mid[i] < 9) {
+            "${mid[i]}"
         } else {
             val alp = listOf(
                 "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
                 "s", "t", "u", "v", "w", "x", "y", "z"
             )//26 - 1
-            m = mid[i] - 10
-            out += alp[m]
+            val m = mid[i] - 10
+            alp[m]
         }
     }
     return out
@@ -339,10 +307,9 @@ fun convertToString(n: Int, base: Int): String {
 fun decimal(digits: List<Int>, base: Int): Int {
     if (digits.isEmpty()) return 0
     var out = 0
-    val di: Int = base
     var exponentionX = digits.size - 1
     for (element in digits) {
-        out += element * (di.toDouble().pow(exponentionX)).toInt()
+        out += element * (base.toDouble().pow(exponentionX)).toInt()
         exponentionX -= 1
     }
     return out
@@ -361,23 +328,17 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
+    val list = mutableListOf<Int>()
     var long = str.length - 1
-    var out = 0
-    var mid: Char
-    var operator = 1
     val transStoI = listOf(
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
         'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
     )
     while (long >= 0) {
-        mid = str[long]
-        for (i in 0..35) {
-            if (mid == transStoI[i]) out += operator * i
-        }
-        operator *= base
+        list.add(transStoI.indexOf(str[long]))
         long--
     }
-    return out
+    return decimal(list.reversed(), base)
 }
 
 /**
@@ -392,8 +353,8 @@ fun roman(n: Int): String {
     var number = n
     val roma = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val nomal = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
-    var out = ""
-    var i = 12
+    var out = buildString { }
+    var i = roma.size - 1
     while (number > 0) {
         if (number >= nomal[i]) {
             number -= nomal[i]
@@ -428,10 +389,14 @@ fun russian(n: Int): String {
         "восемьсот", "девятьсот"
     )// 36 - 1
     if (n == 0) return "ноль"
-    var out1 = ""
-    var mid = "тысяч "
-    var out2 = ""
-    var i = 35
+    var out1 = buildString { }
+    val mid = when {
+        moreThunsand % 10 == 1 && moreThunsand % 100 !in 10..19 -> "тысяча "
+        moreThunsand % 10 in 2..4 && moreThunsand % 100 !in 10..19 -> "тысячи "
+        else -> "тысяч "
+    }
+    var out2 = buildString { }
+    var i = inRus.size - 1
     while (lessThunsand > 0) {
         if (lessThunsand >= number[i]) {
             out1 += inRus[i] + " "
@@ -439,15 +404,13 @@ fun russian(n: Int): String {
         }
         i--
     }
-    if (moreThunsand % 10 == 1 && moreThunsand % 100 !in 10..19) mid = "тысяча "
-    if (moreThunsand % 10 in 2..4  && moreThunsand % 100 !in 10..19 ) mid = "тысячи "
-    i = 35
+    i = inRus.size - 1
     while (moreThunsand > 0) {
         if (moreThunsand == 2) {
             out2 += "две "
             break
         }
-        if (moreThunsand == 1){
+        if (moreThunsand == 1) {
             out2 += "одна "
             break
         }
