@@ -320,6 +320,7 @@ fun fsotOutput(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    if(treasures.isEmpty()) return emptySet()
     val weight = mutableListOf<Int>()
     val money = mutableListOf<Int>()
     var number = 0
