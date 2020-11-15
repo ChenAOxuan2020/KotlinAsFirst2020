@@ -144,16 +144,19 @@ fun mean(list: List<Double>): Double = when {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> {
-    return if (list.isEmpty()) list
-    else {
-        val out = mean(list)
-        for ((index, element) in list.withIndex()) {
-            list[index] = element - out
-        }
-        list
-    }
+fun center(list: MutableList<Double>): MutableList<Double> = when {
+    list.isEmpty() -> list
+    else -> centerOutput(list)
 }
+
+fun centerOutput(list: MutableList<Double>): MutableList<Double> {
+    val out = mean(list)
+    for ((index, element) in list.withIndex()) {
+        list[index] = element - out
+    }
+    return list
+}
+
 
 /**
  * Средняя (3 балла)
@@ -162,15 +165,17 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int {
-    return if (a.isEmpty() || b.isEmpty()) 0
-    else {
-        var out = 0
-        for (i in a.indices) {
-            out += a[i] * b[i]
-        }
-        out
+fun times(a: List<Int>, b: List<Int>): Int = when {
+    (a.isEmpty() || b.isEmpty()) -> 0
+    else -> timesOutput(a, b)
+}
+
+fun timesOutput(a: List<Int>, b: List<Int>): Int {
+    var out = 0
+    for (i in a.indices) {
+        out += a[i] * b[i]
     }
+    return out
 }
 
 /**
@@ -181,15 +186,17 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int {
-    return if (p.isEmpty()) 0
-    else {
-        var out = 0
-        for (i in p.indices) {
-            out += (p[i] * x.toDouble().pow(i)).toInt()
-        }
-        out
+fun polynom(p: List<Int>, x: Int): Int = when {
+    p.isEmpty() -> 0
+    else -> polynomOutput(p, x)
+}
+
+fun polynomOutput(p: List<Int>, x: Int): Int {
+    var out = 0
+    for (i in p.indices) {
+        out += (p[i] * x.toDouble().pow(i)).toInt()
     }
+    return out
 }
 
 /**
@@ -202,16 +209,18 @@ fun polynom(p: List<Int>, x: Int): Int {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    return if (list.isEmpty()) list
-    else {
-        var input = 0
-        for (i in list.indices) {
-            input += list[i]
-            list[i] = input
-        }
-        list
+fun accumulate(list: MutableList<Int>): MutableList<Int> = when {
+    list.isEmpty() -> list
+    else -> accumlateOutput(list)
+}
+
+fun accumlateOutput(list: MutableList<Int>): MutableList<Int> {
+    var input = 0
+    for (i in list.indices) {
+        input += list[i]
+        list[i] = input
     }
+    return list
 }
 
 /**
@@ -225,7 +234,7 @@ fun factorize(n: Int): List<Int> {
     val out = mutableListOf<Int>()
     var number = n
     var i = 2
-    while (number / 2 > i) {
+    while (sqrt(number.toDouble()) >= i) {
         if (number % i == 0) {
             out.add(i)
             number /= i
@@ -275,16 +284,16 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
+    val alp = listOf(
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
+        "s", "t", "u", "v", "w", "x", "y", "z"
+    )//26 - 1
     val mid = convert(n, base)
-    var out = buildString { }
+    var out = ""
     for (i in mid.indices) {
         out += if (mid[i] < 10) {
             "${mid[i]}"
         } else {
-            val alp = listOf(
-                "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
-                "s", "t", "u", "v", "w", "x", "y", "z"
-            )//26 - 1
             val m = mid[i] - 10
             alp[m]
         }
@@ -349,7 +358,7 @@ fun roman(n: Int): String {
     var number = n
     val roma = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val nomal = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
-    var out = buildString { }
+    var out = ""
     var i = roma.size - 1
     while (number > 0) {
         if (number >= nomal[i]) {
@@ -385,13 +394,13 @@ fun russian(n: Int): String {
         "восемьсот", "девятьсот"
     )// 36 - 1
     if (n == 0) return "ноль"
-    var out1 = buildString { }
+    var out1 = ""
     val mid = when {
         moreThunsand % 10 == 1 && moreThunsand % 100 !in 10..19 -> "тысяча "
         moreThunsand % 10 in 2..4 && moreThunsand % 100 !in 10..19 -> "тысячи "
         else -> "тысяч "
     }
-    var out2 = buildString { }
+    var out2 = ""
     var i = inRus.size - 1
     while (lessThunsand > 0) {
         if (lessThunsand >= number[i]) {

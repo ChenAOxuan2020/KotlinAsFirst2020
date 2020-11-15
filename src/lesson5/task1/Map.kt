@@ -2,6 +2,7 @@
 
 package lesson5.task1
 
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -277,7 +278,25 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = when {
+    list.isEmpty() -> Pair(-1, -1)
+    else -> fsotOutput(list, number)
+}
+
+fun fsotOutput(list: List<Int>, number: Int): Pair<Int, Int> {
+    var i = 0
+    while (i <= list.size - 1) {
+        val a = list[i]
+        if (list.indexOf(number - a) != -1 && list.indexOf(number - a) != i) {
+            return when {
+                i < list.indexOf(number - a) -> Pair(i, list.indexOf(number - a))
+                else -> Pair(list.indexOf(number - a), i)
+            }
+        }
+        i++
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная (8 баллов)
@@ -300,4 +319,61 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val weight = mutableListOf<Int>()
+    val money = mutableListOf<Int>()
+    var number = 0
+    for (i in treasures) {
+        weight.add(i.value.first)
+        money.add(i.value.second)
+        number++
+    }
+    if (weight[0] > capacity) return emptySet()
+    val table = mutableMapOf<Double, Int>()
+    var operatot = 10
+    while (operatot <= number) {
+        operatot *= 10
+    }
+    val a = 1.0 / operatot / 10.0
+    var j = 0
+    while (j <= capacity) {
+        table[0.0 + j] = 0
+        j++
+    }
+    var i = 1
+    while (i <= number) {
+        j = 0
+        while (j <= capacity) {
+
+            if (weight[i - 1] > j) {
+                table[j + i * a] = (table[j + (i - 1) * a] ?: 0)
+            } else {
+                if (money[i - 1] + (table[j - weight[i - 1] + (i - 1) * a] ?: 0) >= table[j + (i - 1) * a] ?: 0) {
+                    table[j + i * a] = money[i - 1] + (table[j - weight[i - 1] + (i - 1) * a] ?: 0)
+                } else {
+                    table[j + i * a] = table[j + (i - 1) * a] ?: 0
+                }
+
+            }
+            j++
+        }
+
+        i++
+    }
+    val out = mutableSetOf<String>()
+    j = capacity
+    i = number
+    while (i >= 1) {
+        if (table[i * a + j]!! > table[(i - 1) * a + j]!!) {
+            for ((item, value) in treasures) {
+                if (value == Pair(weight[i - 1], money[i - 1])) {
+                    out += item
+                }
+            }
+            j -= weight[i - 1]
+        }
+        if (j == 0) break
+        i--
+    }
+    return out.toSet()
+}

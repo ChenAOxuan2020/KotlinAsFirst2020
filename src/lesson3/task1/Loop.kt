@@ -94,9 +94,8 @@ fun fib(n: Int): Int {
     if (number <= 2) return 1
     var resultA = 1
     var resultB = 1
-    var resultC: Int
     for (i in 3..number) {
-        resultC = resultA
+        val resultC = resultA
         resultA += resultB
         resultB = resultC
     }
@@ -167,11 +166,10 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var remain: Int
     var a = max(m, n)
     var b = min(m, n)
     while (b != 0) {
-        remain = a % b
+        val remain = a % b
         a = b
         b = remain
     }
@@ -288,31 +286,23 @@ fun cos(x: Double, eps: Double): Double {
     var output = 1.0
     var next = 1.0
     var n = 0
-    var equal = x
-    while (equal !in -PI..PI) {
-        if (equal < -PI) {
-            equal += 2 * PI
-        }
-        if (equal > PI) {
-            equal -= 2 * PI
-        }
+    var equal = abs(x % PI)
+    if (equal > PI / 2) {
+        equal -= PI
     }
-    val operator: Int
-    if (equal in -PI / 2..PI / 2) {
-        operator = 1
-    } else {
-        operator = -1
-        if (equal <= -PI / 2)
-            equal = -PI - equal
-        if (equal >= PI / 2)
-            equal = PI - equal
+    if (equal < -PI / 2) {
+        equal += PI
     }
+    val operatorCos = if (x % (2 * PI) in -PI / 2..PI / 2
+        || x % (2 * PI) in -(3 * PI) / 2..-(5 * PI) / 2
+        || x % (2 * PI) in (3 * PI) / 2..(5 * PI) / 2
+    ) 1 else -1
     do {
         next *= -1 * equal * equal / (n + 1) / (n + 2)
         output += next
         n += 2
     } while (abs(next) >= abs(eps))
-    return output * operator
+    return output * operatorCos
 }
 
 /**
