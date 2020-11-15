@@ -369,6 +369,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
             for ((item, value) in treasures) {
                 if (value == Pair(weight[i - 1], money[i - 1])) {
                     out += item
+                    break
                 }
             }
             j -= weight[i - 1]

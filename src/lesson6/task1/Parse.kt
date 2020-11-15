@@ -127,7 +127,24 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val list = jumps.split(" ")
+    val size = list.size
+    if (list.size % 2 != 0) return -1
+    var i = 1
+    var maxHight = 0
+    while (i <= size){
+        try {
+            val hight = list[i - 1].toInt()
+            val standard = list[i]
+            if (standard.contains('+') && hight > maxHight) maxHight = hight
+        }catch (e : NumberFormatException){
+            return -1
+        }
+        i += 2
+    }
+    return maxHight
+}
 
 /**
  * Сложная (6 баллов)
@@ -149,7 +166,34 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val list = str.split(" ")
+    var times = 0
+    var location = 0
+    for (it in list) {
+        var i = list.indexOf(it) + 1
+        var n = 0
+        while (i <= list.size - 1) {
+            if (it == list[i]) {
+                n++
+            }
+            i++
+        }
+        if (n > times) {
+            times = n
+            location = list.indexOf(it)
+        }
+    }
+    return if (times == 0) -1
+    else {
+        var out = location
+        while (location - 1 >= 0) {
+            out += (list[location - 1]).length
+            location--
+        }
+        out
+    }
+}
 
 /**
  * Сложная (6 баллов)
@@ -175,7 +219,52 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    if (roman.isEmpty()) return 0
+    val translat1String = mapOf(
+        "M" to 1000,
+        "D" to 500,
+        "C" to 100,
+        "L" to 50,
+        "X" to 10,
+        "V" to 5,
+        "I" to 1,
+    )
+    val translate2String = mapOf(
+        "CM" to 900,
+        "CD" to 400,
+        "XC" to 90,
+        "XL" to 40,
+        "IX" to 9,
+        "IV" to 4,
+    )
+    try {
+        var dipartString = roman
+        val list = mutableListOf<String>()
+        while (dipartString.isNotEmpty()) {
+            list.add(dipartString[0].toString())
+            dipartString = dipartString.drop(1)
+        }
+        var out = 0
+        var i = 0
+        while (i <= list.size - 1) {
+            if (i + 1 <= list.size - 1) {
+                if (translate2String.containsKey(list[i] + list[i + 1])) {
+                    out += translate2String[list[i] + list[i + 1]]!!
+                    i += 2
+                    continue
+                }
+            }
+            if (translat1String.containsKey(list[i])) {
+                out += translat1String[list[i]]!!
+            } else return -1
+        }
+        return out
+    } catch (e: NumberFormatException) {
+        return -1
+    }
+}
+
 
 /**
  * Очень сложная (7 баллов)
