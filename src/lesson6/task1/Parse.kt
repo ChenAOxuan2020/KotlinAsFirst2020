@@ -138,6 +138,7 @@ fun bestHighJump(jumps: String): Int {
             val hight = list[i - 1].toInt()
             val standard = list[i]
             if (standard.contains('+') && hight > maxHight) maxHight = hight
+            if (!standard.contains('%') || !standard.contains('-')) return -1
         }catch (e : NumberFormatException){
             return -1
         }
@@ -184,7 +185,7 @@ fun firstDuplicateIndex(str: String): Int {
             location = list.indexOf(it)
         }
     }
-    return if (times == 0) -1
+    return if (location == 0) -1
     else {
         var out = location
         while (location - 1 >= 0) {
@@ -220,7 +221,7 @@ fun mostExpensive(description: String): String = TODO()
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    if (roman.isEmpty()) return 0
+    if (roman.isEmpty()) return -1
     val translat1String = mapOf(
         "M" to 1000,
         "D" to 500,
@@ -257,6 +258,7 @@ fun fromRoman(roman: String): Int {
             }
             if (translat1String.containsKey(list[i])) {
                 out += translat1String[list[i]]!!
+                i++
             } else return -1
         }
         return out
