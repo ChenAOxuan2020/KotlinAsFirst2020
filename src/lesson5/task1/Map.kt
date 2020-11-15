@@ -329,6 +329,19 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         money.add(i.value.second)
         number++
     }
+    val size = weight.size
+    for (k1 in 0 until size) {
+        for (k2 in 0 until size - k1) {
+            if (weight[k2] > weight[k2 + 1]) {
+                var between = weight[k2 + 1]
+                weight[k2 + 1] = weight[k2]
+                weight[k2] = between
+                between = money[k2 + 1]
+                money[k2 + 1] = money[k2]
+                money[k2] = between
+            }
+        }
+    }
     if (weight[0] > capacity) return emptySet()
     val table = mutableMapOf<Double, Int>()
     var operatot = 10
