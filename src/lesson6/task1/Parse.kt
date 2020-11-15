@@ -133,13 +133,13 @@ fun bestHighJump(jumps: String): Int {
     if (list.size % 2 != 0) return -1
     var i = 1
     var maxHight = 0
-    while (i <= size){
+    while (i <= size) {
         try {
             val hight = list[i - 1].toInt()
             val standard = list[i]
             if (standard.contains('+') && hight > maxHight) maxHight = hight
-            if (!standard.contains('%') || !standard.contains('-')) return -1
-        }catch (e : NumberFormatException){
+            if (!standard.contains('%') && !standard.contains('-') && !standard.contains('+')) return -1
+        } catch (e: NumberFormatException) {
             return -1
         }
         i += 2

@@ -331,7 +331,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     }
     val size = weight.size
     for (k1 in 0 until size) {
-        for (k2 in 0 until size - k1) {
+        for (k2 in 0 until size - k1 - 1) {
             if (weight[k2] > weight[k2 + 1]) {
                 var between = weight[k2 + 1]
                 weight[k2 + 1] = weight[k2]
