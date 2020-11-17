@@ -146,15 +146,13 @@ fun mean(list: List<Double>): Double = when {
  */
 fun center(list: MutableList<Double>): MutableList<Double> = when {
     list.isEmpty() -> list
-    else -> centerOutput(list)
-}
-
-fun centerOutput(list: MutableList<Double>): MutableList<Double> {
-    val out = mean(list)
-    for ((index, element) in list.withIndex()) {
-        list[index] = element - out
+    else -> {
+        val out = mean(list)
+        for ((index, element) in list.withIndex()) {
+            list[index] = element - out
+        }
+        list
     }
-    return list
 }
 
 
@@ -284,21 +282,18 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
-    val alp = listOf(
-        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r",
-        "s", "t", "u", "v", "w", "x", "y", "z"
-    )//26 - 1
+    val alp = ('a'..'z').toList()
     val mid = convert(n, base)
-    var out = ""
-    for (i in mid.indices) {
-        out += if (mid[i] < 10) {
-            "${mid[i]}"
-        } else {
-            val m = mid[i] - 10
-            alp[m]
+    return buildString {
+        for (i in mid.indices) {
+            if (mid[i] < 10) {
+                append("${mid[i]}")
+            } else {
+                val m = mid[i] - 10
+                this.append(alp[m])
+            }
         }
     }
-    return out
 }
 
 
@@ -335,10 +330,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     var long = str.length - 1
-    val transStoI = listOf(
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-        'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-    )
+    val transStoI = ('0'..'9').toList() + ('a'..'z').toList()
     while (long >= 0) {
         list.add(transStoI.indexOf(str[long]))
         long--
@@ -358,17 +350,17 @@ fun roman(n: Int): String {
     var number = n
     val roma = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val nomal = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
-    var out = ""
-    var i = roma.size - 1
-    while (number > 0) {
-        if (number >= nomal[i]) {
-            number -= nomal[i]
-            out += roma[i]
-            i++
+    return buildString {
+        var i = roma.size - 1
+        while (number > 0) {
+            if (number >= nomal[i]) {
+                number -= nomal[i]
+                append(roma[i])
+                i++
+            }
+            i--
         }
-        i--
     }
-    return out
 }
 
 
@@ -394,36 +386,38 @@ fun russian(n: Int): String {
         "восемьсот", "девятьсот"
     )// 36 - 1
     if (n == 0) return "ноль"
-    var out1 = ""
     val mid = when {
         moreThunsand % 10 == 1 && moreThunsand % 100 !in 10..19 -> "тысяча "
         moreThunsand % 10 in 2..4 && moreThunsand % 100 !in 10..19 -> "тысячи "
         else -> "тысяч "
     }
-    var out2 = ""
     var i = inRus.size - 1
-    while (lessThunsand > 0) {
-        if (lessThunsand >= number[i]) {
-            out1 += inRus[i] + " "
-            lessThunsand -= number[i]
+    val out1 = buildString {
+        while (lessThunsand > 0) {
+            if (lessThunsand >= number[i]) {
+                this.append(inRus[i] + " ")
+                lessThunsand -= number[i]
+            }
+            i--
         }
-        i--
     }
-    i = inRus.size - 1
-    while (moreThunsand > 0) {
-        if (moreThunsand == 2) {
-            out2 += "две "
-            break
+    val out2 = buildString {
+        i = inRus.size - 1
+        while (moreThunsand > 0) {
+            if (moreThunsand == 2) {
+                this.append("две ")
+                break
+            }
+            if (moreThunsand == 1) {
+                this.append("одна ")
+                break
+            }
+            if (moreThunsand >= number[i]) {
+                this.append(inRus[i] + " ")
+                moreThunsand -= number[i]
+            }
+            i--
         }
-        if (moreThunsand == 1) {
-            out2 += "одна "
-            break
-        }
-        if (moreThunsand >= number[i]) {
-            out2 += inRus[i] + " "
-            moreThunsand -= number[i]
-        }
-        i--
     }
     return when {
         n <= 999 -> out1.trim()
