@@ -286,23 +286,13 @@ fun cos(x: Double, eps: Double): Double {
     var output = 1.0
     var next = 1.0
     var n = 0
-    var equal = abs(x % PI)
-    if (equal > PI / 2) {
-        equal -= PI
-    }
-    if (equal < -PI / 2) {
-        equal += PI
-    }
-    val operatorCos = if (x % (2 * PI) in -PI / 2..PI / 2
-        || x % (2 * PI) in -(3 * PI) / 2..-(5 * PI) / 2
-        || x % (2 * PI) in (3 * PI) / 2..(5 * PI) / 2
-    ) 1 else -1
+    val equal = abs(x % (2 * PI))
     do {
         next *= -1 * equal * equal / (n + 1) / (n + 2)
         output += next
         n += 2
     } while (abs(next) >= abs(eps))
-    return output * operatorCos
+    return output
 }
 
 /**
