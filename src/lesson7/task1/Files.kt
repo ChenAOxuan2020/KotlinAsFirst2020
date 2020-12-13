@@ -148,9 +148,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val accoutAndWord = mapOfInput(inputName)
     val outPutFile = File(outputName).bufferedWriter()
     accoutAndWord.entries.forEach {
+        // when no word
         if (it.value == 0) {
             outPutFile.write("\n")
         }
+        //when only one word
         if (it.value == 1) {
             outPutFile.write(it.key[0] + "\n")
         }
@@ -159,8 +161,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             for (word in it.key) {
                 length += word.length
             }
+            //get number of speace
             val speaceInneed = (max - length) / (it.value - 1) + 1
+            //position where number of speace - 1
             val rest = max - length - (speaceInneed - 1) * (it.value - 1)
+            //from map to outfile
             var i = 0
             var speace = ""
             while (i < speaceInneed - 1) {
@@ -186,10 +191,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     }
     outPutFile.close()
 }
-
+// form input file to map(word of this line, number of word in this line)
 fun mapOfInput(inputName: String): MutableMap<List<String>, Int> {
     val file = File(inputName)
     val map = mutableMapOf<List<String>, Int>()
+    //k in oder to avoid the same key when this line no word
     var k = 0
     file.forEachLine {
         if (it.isEmpty()) {
@@ -206,7 +212,7 @@ fun mapOfInput(inputName: String): MutableMap<List<String>, Int> {
     }
     return map
 }
-
+// get the max number of symbol in the file
 fun maxOfLine(inputName: String): Int {
     var i = 0
     val file = File(inputName)
