@@ -75,7 +75,22 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val map = mutableMapOf<String, Int>()
+    val words = File(inputName).readText().toLowerCase()
+    val list = substrings
+    for (item in list) {
+        map.put(item, 0)
+    }
+    for (iteam in map.keys) {
+        var mid = 1
+        while (words.indexOf(iteam.toLowerCase(), mid + 1) > 0) {
+            mid = words.toLowerCase().indexOf(iteam.toLowerCase(), mid + 1)
+            map[iteam] = map[iteam]!! + 1
+        }
+    }
+    return map
+}
 
 
 /**
@@ -124,13 +139,13 @@ fun centerFile(inputName: String, outputName: String) {
                     this.append(" ")
                     i++
                 }
-            }else{
+            } else {
                 var length = 0
                 for (word in it.key) {
                     length += word.length
                 }
 
-                this.append(" ".repeat((max - length - it.value + 1) / 2) )
+                this.append(" ".repeat((max - length - it.value + 11) / 2))
                 var i = 0
                 while (i <= it.value - 2) {
                     this.append(it.key[i] + " ")
@@ -186,7 +201,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         if (it.value == 1) {
             outPutFile.write(it.key[0] + "\n")
         }
-        if(it.value != 0 && it.value != 1){
+        if (it.value != 0 && it.value != 1) {
             var length = 0
             for (word in it.key) {
                 length += word.length
@@ -205,7 +220,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             val writeIn = buildString {
                 var k = 1
                 while (k <= rest) {
-                    this.append(it.key[k - 1] + speace +' ')
+                    this.append(it.key[k - 1] + speace + ' ')
                     k++
                 }
                 while (k > rest && k < it.value) {
@@ -221,6 +236,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     }
     outPutFile.close()
 }
+
 // form input file to map(word of this line, number of word in this line)
 fun mapOfInput(inputName: String): MutableMap<List<String>, Int> {
     val file = File(inputName)
@@ -242,6 +258,7 @@ fun mapOfInput(inputName: String): MutableMap<List<String>, Int> {
     }
     return map
 }
+
 // get the max number of symbol in the file
 fun maxOfLine(inputName: String): Int {
     var i = 0
