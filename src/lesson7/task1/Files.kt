@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import java.lang.StringBuilder
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -75,22 +76,7 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    val map = mutableMapOf<String, Int>()
-    val words = File(inputName).readText().toLowerCase()
-    val list = substrings
-    for (item in list) {
-        map.put(item, 0)
-    }
-    for (iteam in map.keys) {
-        var mid = 1
-        while (words.indexOf(iteam.toLowerCase(), mid + 1) > 0) {
-            mid = words.toLowerCase().indexOf(iteam.toLowerCase(), mid + 1)
-            map[iteam] = map[iteam]!! + 1
-        }
-    }
-    return map
-}
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
 
 
 /**
@@ -107,7 +93,26 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    TODO()
+    val fileInPut = File(inputName).bufferedReader()
+    val fileOutPut = File(outputName).bufferedWriter()
+    val sybolA = setOf('Ж', 'Ч', 'Ш', 'Щ', 'ж', 'ч', 'ш', 'щ')
+    val subolB = mapOf(
+        'Ы' to 'И',
+        'Я' to 'А',
+        'Ю' to 'У',
+        'ы' to 'и',
+        'я' to 'а',
+        'ю' to 'у'
+    )
+    fileInPut.forEachLine {
+        val line = StringBuilder(it)
+        for (i in 0 until line.length - 1)
+            if (line[i] in sybolA && line[i + 1] in subolB) line[i + 1] = subolB.getValue(line[i + 1])
+        fileOutPut.write(line.toString())
+        fileOutPut.newLine()
+    }
+    fileInPut.close()
+    fileOutPut.close()
 }
 
 /**
