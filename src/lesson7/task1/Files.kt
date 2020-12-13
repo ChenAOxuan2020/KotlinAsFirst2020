@@ -161,7 +161,8 @@ fun centerFile(inputName: String, outputName: String) {
                 }
             }
         }
-        outPutFile.write(str + "\n")
+        outPutFile.write(str)
+        outPutFile.newLine()
     }
     outPutFile.close()
 }
@@ -200,11 +201,12 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     accoutAndWord.entries.forEach {
         // when no word
         if (it.value == 0) {
-            outPutFile.write("\n")
+            outPutFile.newLine()
         }
         //when only one word
         if (it.value == 1) {
-            outPutFile.write(it.key[0] + "\n")
+            outPutFile.write(it.key[0])
+            outPutFile.newLine()
         }
         if (it.value != 0 && it.value != 1) {
             var length = 0
@@ -236,7 +238,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                     this.append(it.key[k - 1])
                 }
             }
-            outPutFile.write(writeIn + "\n")
+            outPutFile.write(writeIn)
+            outPutFile.newLine()
         }
     }
     outPutFile.close()
