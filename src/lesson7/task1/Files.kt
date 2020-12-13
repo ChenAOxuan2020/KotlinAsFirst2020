@@ -113,7 +113,37 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val max = maxOfLine(inputName)
+    val map = mapOfInput(inputName)
+    val outPutFile = File(outputName).bufferedWriter()
+    map.entries.forEach {
+        val str = buildString {
+            if (it.value == 0) {
+                var i = 0
+                while (i < max / 2) {
+                    this.append(" ")
+                    i++
+                }
+            }else{
+                var length = 0
+                for (word in it.key) {
+                    length += word.length
+                }
+
+                this.append(" ".repeat((max - length - it.value + 1) / 2) )
+                var i = 0
+                while (i <= it.value - 2) {
+                    this.append(it.key[i] + " ")
+                    i++
+                }
+                if (i == it.value - 1) {
+                    this.append(it.key[i])
+                }
+            }
+        }
+        outPutFile.write(str + "\n")
+    }
+    outPutFile.close()
 }
 
 /**
