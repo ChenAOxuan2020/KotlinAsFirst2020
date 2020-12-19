@@ -92,29 +92,9 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  * Исключения (жюри, брошюра, парашют) в рамках данного задания обрабатывать не нужно
  *
  */
-fun sibilants(inputName: String, outputName: String) {
-    val fileInPut = File(inputName).bufferedReader()
-    val fileOutPut = File(outputName).bufferedWriter()
-    val sybolA = setOf('Ж', 'Ч', 'Ш', 'Щ', 'ж', 'ч', 'ш', 'щ')
-    val subolB = mapOf(
-        'Ы' to 'И',
-        'Я' to 'А',
-        'Ю' to 'У',
-        'ы' to 'и',
-        'я' to 'а',
-        'ю' to 'у'
-    )
-    fileInPut.forEachLine {
-        val line = StringBuilder(it)
-        for (i in 0 until line.length - 1)
-            if (line[i] in sybolA && line[i + 1] in subolB) line[i + 1] = subolB.getValue(line[i + 1])
-        fileOutPut.write(line.toString())
-        fileOutPut.newLine()
-    }
-    fileInPut.close()
-    fileOutPut.close()
+fun sibilants(inputName: String, outputName: String)  {
+    TODO()
 }
-
 /**
  * Средняя (15 баллов)
  *
