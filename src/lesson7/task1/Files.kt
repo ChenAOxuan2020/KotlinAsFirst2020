@@ -129,8 +129,10 @@ fun centerFile(inputName: String, outputName: String) {
                 for (item in list) {
                     length += item.length + 1
                 }
-                length - 1
-                this.append(" ".repeat((max - length + 1) / 2))
+                length -= 1
+                this.append(
+                    " ".repeat((max - length) / 2)
+                )
                 var i = 0
                 while (i <= list.count() - 1) {
                     if (i != list.count() - 1) {
