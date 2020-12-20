@@ -92,9 +92,10 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  * Исключения (жюри, брошюра, парашют) в рамках данного задания обрабатывать не нужно
  *
  */
-fun sibilants(inputName: String, outputName: String)  {
+fun sibilants(inputName: String, outputName: String) {
     TODO()
 }
+
 /**
  * Средняя (15 баллов)
  *
@@ -147,6 +148,28 @@ fun centerFile(inputName: String, outputName: String) {
     outPutFile.close()
 }
 
+// form input file to map(word of this line, number of word in this line)
+fun mapOfInput(inputName: String): MutableMap<List<String>, Int> {
+    val file = File(inputName)
+    val map = mutableMapOf<List<String>, Int>()
+    //k in oder to avoid the same key when this line no word
+    var k = 0
+    file.forEachLine {
+        if (it.isEmpty()) {
+            map.put(listOf("$k"), 0)
+        } else {
+            val lineWord = it.trim().trimEnd().split(' ')
+            var i = 0
+            for (word in lineWord) {
+                i++
+            }
+            map.put(lineWord, i)
+        }
+        k++
+    }
+    return map
+}
+
 /**
  * Сложная (20 баллов)
  *
@@ -176,75 +199,53 @@ fun centerFile(inputName: String, outputName: String) {
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
     val max = maxOfLine(inputName)
-    val accoutAndWord = mapOfInput(inputName)
     val outPutFile = File(outputName).bufferedWriter()
-    accoutAndWord.entries.forEach {
-        // when no word
-        if (it.value == 0) {
+    File(inputName).forEachLine {
+        val list = it.trim().trimEnd().split(' ')
+        if (list.isEmpty()) {
             outPutFile.newLine()
-        }
-        //when only one word
-        if (it.value == 1) {
-            outPutFile.write(it.key[0])
-            outPutFile.newLine()
-        }
-        if (it.value != 0 && it.value != 1) {
-            var length = 0
-            for (word in it.key) {
-                length += word.length
-            }
-            //get number of speace
-            val speaceInneed = (max - length) / (it.value - 1) + 1
-            //position where number of speace - 1
-            val rest = max - length - (speaceInneed - 1) * (it.value - 1)
-            //from map to outfile
-            var i = 0
-            var speace = ""
-            while (i < speaceInneed - 1) {
-                speace += " "
-                i++
-            }
-            val writeIn = buildString {
-                var k = 1
-                while (k <= rest) {
-                    this.append(it.key[k - 1] + speace + ' ')
-                    k++
+        } else {
+            val word = list.count()
+            if (word == 1) {
+                outPutFile.write(list[0])
+            } else {
+                var lengthOfWord = 0
+                for (item in list) {
+                    lengthOfWord += item.length
                 }
-                while (k > rest && k < it.value) {
-                    this.append(it.key[k - 1] + speace)
-                    k++
+                val numberOfSpeace = (max - lengthOfWord) / (word - 1)
+                val position = max - lengthOfWord - numberOfSpeace * (word - 1)
+                val speace = buildString {
+                    for (i in 1..numberOfSpeace) {
+                        this.append(" ")
+                    }
                 }
-                if (k == it.value) {
-                    this.append(it.key[k - 1])
+                val str = buildString {
+                    var i = 0
+                    for (item in list) {
+                        if (i <= position - 1) {
+                            this.append("$item$speace ")
+                            i++
+                            continue
+                        } else {
+                            if (i != word - 1) {
+                                this.append(item + speace)
+                                i++
+                                continue
+                            } else {
+                                this.append(item)
+                                i++
+                                continue
+                            }
+                        }
+                    }
                 }
+                outPutFile.write(str)
             }
-            outPutFile.write(writeIn)
             outPutFile.newLine()
         }
     }
     outPutFile.close()
-}
-
-// form input file to map(word of this line, number of word in this line)
-fun mapOfInput(inputName: String): MutableMap<List<String>, Int> {
-    val file = File(inputName)
-    val map = mutableMapOf<List<String>, Int>()
-    //k in oder to avoid the same key when this line no word
-    var k = 0
-    file.forEachLine {
-        if (it.isEmpty()) {
-            map.put(listOf("$k"), 0)
-        } else {
-            val lineWord = it.trim().trimEnd().split(' ')
-            var i = 0
-            for (word in lineWord) {
-                i++
-            }
-            map.put(lineWord, i)
-        }
-        k++
-    }
-    return map
 }
 
 // get the max number of symbol in the file
