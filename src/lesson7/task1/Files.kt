@@ -180,12 +180,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val max = maxOfLine(inputName)
     val outPutFile = File(outputName).bufferedWriter()
     File(inputName).forEachLine {
-        val list = it.trim().trimEnd().split(" ")
-        if (list.isNotEmpty()) {
-            for (item in list) {
-                item.replace(" ", "")
-            }
-        }
+        val list = it.trim().trimEnd().replace(Regex("""\s+"""), " ").split(" ")
         if (list.isEmpty()) {
             outPutFile.newLine()
         } else {
@@ -199,17 +194,13 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                 }
                 val numberOfSpeace = (max - lengthOfWord) / (word - 1)
                 var ex = max - lengthOfWord - numberOfSpeace * (word - 1)
-                val speace = buildString {
-                    for (i in 1..numberOfSpeace) {
-                        this.append(" ")
-                    }
-                }
+                val speace = " ".repeat(numberOfSpeace)
                 val str = buildString {
                     var i = 0
                     while (i != list.count() - 1) {
                         this.append(list[i])
                         this.append(speace)
-                        if (ex > 0){
+                        if (ex > 0) {
                             this.append(" ")
                             ex--
                         }
@@ -231,11 +222,10 @@ fun maxOfLine(inputName: String): Int {
     val file = File(inputName)
     file.forEachLine {
         if (it.isNotEmpty()) {
-            val mid = it.trim().trimEnd().split(' ')
+            val mid = it.trim().trimEnd().replace(Regex("""\s+"""), " ").split(' ')
             var speaceNumber = -1
             var long = 0
             for (word in mid) {
-                word.replace(" ", "")
                 speaceNumber++
                 long += word.length
             }
