@@ -130,7 +130,7 @@ fun centerFile(inputName: String, outputName: String) {
                     length += word.length
                 }
 
-                this.append(" ".repeat((max - length - it.value + 11) / 2))
+                this.append(" ".repeat((max - length - it.value + 1) / 2))
                 var i = 0
                 while (i <= it.value - 2) {
                     this.append(it.key[i] + " ")
