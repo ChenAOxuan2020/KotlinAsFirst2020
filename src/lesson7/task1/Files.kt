@@ -114,11 +114,11 @@ fun sibilants(inputName: String, outputName: String) {
  */
 fun centerFile(inputName: String, outputName: String) {
     val max = maxOfLine(inputName)
+    val map = mapOfInput(inputName)
     val outPutFile = File(outputName).bufferedWriter()
-    File(inputName).forEachLine {
+    map.entries.forEach {
         val str = buildString {
-            val list = it.trim().trimEnd().split(' ')
-            if (list.isEmpty()) {
+            if (it.value == 0) {
                 var i = 0
                 while (i < max / 2) {
                     this.append(" ")
@@ -126,19 +126,18 @@ fun centerFile(inputName: String, outputName: String) {
                 }
             } else {
                 var length = 0
-                for (item in list) {
-                    length += item.length + 1
+                for (word in it.key) {
+                    length += word.length
                 }
-                length - 1
-                this.append(" ".repeat((max - length + 1) / 2))
+
+                this.append(" ".repeat((max - length - it.value + 1) / 2))
                 var i = 0
-                while (i <= list.count() - 1) {
-                    if (i != list.count() - 1) {
-                        this.append(list[i] + " ")
-                    } else {
-                        this.append(list[i])
-                    }
+                while (i <= it.value - 2) {
+                    this.append(it.key[i] + " ")
                     i++
+                }
+                if (i == it.value - 1) {
+                    this.append(it.key[i])
                 }
             }
         }
@@ -146,6 +145,28 @@ fun centerFile(inputName: String, outputName: String) {
         outPutFile.newLine()
     }
     outPutFile.close()
+}
+
+// form input file to map(word of this line, number of word in this line)
+fun mapOfInput(inputName: String): MutableMap<List<String>, Int> {
+    val file = File(inputName)
+    val map = mutableMapOf<List<String>, Int>()
+    //k in oder to avoid the same key when this line no word
+    var k = 0
+    file.forEachLine {
+        if (it.isEmpty()) {
+            map.put(listOf("$k"), 0)
+        } else {
+            val lineWord = it.trim().trimEnd().split(' ')
+            var i = 0
+            for (word in lineWord) {
+                i++
+            }
+            map.put(lineWord, i)
+        }
+        k++
+    }
+    return map
 }
 
 
