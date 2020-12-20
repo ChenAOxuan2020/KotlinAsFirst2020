@@ -181,6 +181,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val outPutFile = File(outputName).bufferedWriter()
     File(inputName).forEachLine {
         val list = it.trim().trimEnd().split(" ")
+        if (list.isNotEmpty()) {
+            for (item in list) {
+                item.replace(" ", "")
+            }
+        }
         if (list.isEmpty()) {
             outPutFile.newLine()
         } else {
@@ -236,6 +241,7 @@ fun maxOfLine(inputName: String): Int {
             var speaceNumber = -1
             var long = 0
             for (word in mid) {
+                word.replace(" ", "")
                 speaceNumber++
                 long += word.length
             }
