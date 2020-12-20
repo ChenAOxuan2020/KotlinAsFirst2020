@@ -117,19 +117,15 @@ fun centerFile(inputName: String, outputName: String) {
     val outPutFile = File(outputName).bufferedWriter()
     File(inputName).forEachLine {
         val str = buildString {
-            val list = it.trim().trimEnd().split(' ')
+            val list = it.trim().trimEnd().replace(Regex("""\s+"""), " ").split(' ')
             if (list.isEmpty()) {
-                var i = 0
-                while (i < max / 2) {
-                    this.append(" ")
-                    i++
-                }
+                this.append(" ".repeat(max / 2))
             } else {
                 var length = 0
                 for (item in list) {
                     length += item.length + 1
                 }
-                length -= 1
+                length = length - 1
                 this.append(
                     " ".repeat((max - length) / 2)
                 )
