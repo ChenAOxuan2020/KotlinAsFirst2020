@@ -116,36 +116,34 @@ fun centerFile(inputName: String, outputName: String) {
     val max = maxOfLine(inputName)
     val outPutFile = File(outputName).bufferedWriter()
     File(inputName).forEachLine {
-        if (inputName == it) {
-            outPutFile.write(it)
-        } else {
-            val str = buildString {
-                val list = it.trim().trimEnd().replace(Regex("""\s+"""), " ").split(' ')
-                if (list.isEmpty()) {
-                    this.append(" ".repeat(max / 2))
-                } else {
-                    var length = 0
-                    for (item in list) {
-                        length += item.length + 1
+        val str = buildString {
+            val list = it.trim().trimEnd().split(' ')
+            if (list.isEmpty()) {
+                var i = 0
+                while (i < max / 2) {
+                    this.append(" ")
+                    i++
+                }
+            } else {
+                var length = 0
+                for (item in list) {
+                    length += item.length + 1
+                }
+                length - 1
+                this.append(" ".repeat((max - length + 1) / 2))
+                var i = 0
+                while (i <= list.count() - 1) {
+                    if (i != list.count() - 1) {
+                        this.append(list[i] + " ")
+                    } else {
+                        this.append(list[i])
                     }
-                    length = length - 1
-                    this.append(
-                        " ".repeat((max - length) / 2)
-                    )
-                    var i = 0
-                    while (i <= list.count() - 1) {
-                        if (i != list.count() - 1) {
-                            this.append(list[i] + " ")
-                        } else {
-                            this.append(list[i])
-                        }
-                        i++
-                    }
+                    i++
                 }
             }
-            outPutFile.write(str)
-            outPutFile.newLine()
         }
+        outPutFile.write(str)
+        outPutFile.newLine()
     }
     outPutFile.close()
 }
