@@ -206,22 +206,15 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                 }
                 val str = buildString {
                     var i = 0
-                    for (item in list) {
-                        if (i <= position - 1) {
-                            this.append("$item$speace ")
-                            i++
-                            continue
-                        } else {
-                            if (i != word - 1) {
-                                this.append(item + speace)
-                                i++
-                                continue
-                            } else {
-                                this.append(item)
-                                break
-                            }
-                        }
+                    while (i <= position - 1) {
+                        this.append(list[i] + speace + " ")
+                        i++
                     }
+                    while (i < list.count() - 1) {
+                        this.append(list[i] + speace)
+                        i++
+                    }
+                    this.append(list[i])
                 }
                 outPutFile.write(str)
             }
