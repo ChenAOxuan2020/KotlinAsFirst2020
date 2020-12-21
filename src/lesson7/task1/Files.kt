@@ -113,60 +113,36 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    val max = maxOfLine(inputName)
-    val map = mapOfInput(inputName)
-    val outPutFile = File(outputName).bufferedWriter()
-    map.entries.forEach {
-        val str = buildString {
-            if (it.value == 0) {
-                var i = 0
-                while (i < max / 2) {
-                    this.append(" ")
-                    i++
-                }
-            } else {
-                var length = 0
-                for (word in it.key) {
-                    length += word.length
-                }
-
-                this.append(" ".repeat((max - length - it.value + 1) / 2))
-                var i = 0
-                while (i <= it.value - 2) {
-                    this.append(it.key[i] + " ")
-                    i++
-                }
-                if (i == it.value - 1) {
-                    this.append(it.key[i])
-                }
-            }
-        }
-        outPutFile.write(str)
-        outPutFile.newLine()
+    val fileInPut = File(inputName)
+    val fileOutPut = File(outputName).bufferedWriter()
+    val list = mutableListOf<String>()
+    fileInPut.forEachLine {
+        list.add(it.trim().trimEnd())
     }
-    outPutFile.close()
-}
-
-// form input file to map(word of this line, number of word in this line)
-fun mapOfInput(inputName: String): MutableMap<List<String>, Int> {
-    val file = File(inputName)
-    val map = mutableMapOf<List<String>, Int>()
-    //k in oder to avoid the same key when this line no word
-    var k = 0
-    file.forEachLine {
-        if (it.isEmpty()) {
-            map.put(listOf("$k"), 0)
+    if (list.isNotEmpty()) {
+        val lines = list.count()
+        if (lines == 1) {
+            fileOutPut.write(list[0])
         } else {
-            val lineWord = it.trim().trimEnd().split(' ')
-            var i = 0
-            for (word in lineWord) {
-                i++
+            var max = 0
+            for (item in list) {
+                if (item.length > max) {
+                    max = item.length
+                }
             }
-            map.put(lineWord, i)
+            for (item in list) {
+                if (item.length == max) {
+                    fileOutPut.write(item)
+                    fileOutPut.newLine()
+                } else {
+                    fileOutPut.write(" ".repeat((max - item.length) / 2))
+                    fileOutPut.write(item)
+                    fileOutPut.newLine()
+                }
+            }
         }
-        k++
     }
-    return map
+    fileOutPut.close()
 }
 
 
