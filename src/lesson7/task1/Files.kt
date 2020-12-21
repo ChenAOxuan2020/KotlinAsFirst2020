@@ -115,6 +115,7 @@ fun sibilants(inputName: String, outputName: String) {
 fun centerFile(inputName: String, outputName: String) {
     val fileInPut = File(inputName)
     val fileOutPut = File(outputName).bufferedWriter()
+    // create mutlist <line of text>
     val list = mutableListOf<String>()
     fileInPut.forEachLine {
         list.add(it.trim().trimEnd())
@@ -124,6 +125,7 @@ fun centerFile(inputName: String, outputName: String) {
         if (lines == 1) {
             fileOutPut.write(list[0])
         } else {
+            // get max length of lines
             var max = 0
             for (item in list) {
                 if (item.length > max) {
@@ -131,10 +133,13 @@ fun centerFile(inputName: String, outputName: String) {
                 }
             }
             for (item in list) {
+                // for the max line
                 if (item.length == max) {
                     fileOutPut.write(item)
                     fileOutPut.newLine()
+                    //for the others lines
                 } else {
+                    //in the head of lines plus " "
                     fileOutPut.write(" ".repeat((max - item.length) / 2))
                     fileOutPut.write(item)
                     fileOutPut.newLine()
@@ -177,21 +182,26 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val max = maxOfLine(inputName)
     val outPutFile = File(outputName).bufferedWriter()
     File(inputName).forEachLine {
+        //let lines in format xx xx xx
         val list = it.trim().trimEnd().replace(Regex("""\s+"""), " ").split(" ")
         if (list.isEmpty()) {
             outPutFile.newLine()
         } else {
+            //get number of words in line
             val word = list.count()
             if (word == 1) {
                 outPutFile.write(list[0])
             } else {
                 var lengthOfWord = 0
+                // number of symbol
                 for (item in list) {
                     lengthOfWord += item.length
                 }
+                //number of " "
                 val numberOfSpeace = (max - lengthOfWord) / (word - 1)
-                var ex = max - lengthOfWord - numberOfSpeace * (word - 1)
                 val speace = " ".repeat(numberOfSpeace)
+                //ex number of " "
+                var ex = max - lengthOfWord - numberOfSpeace * (word - 1)
                 val str = buildString {
                     var i = 0
                     while (i != list.count() - 1) {
